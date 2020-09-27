@@ -4,11 +4,14 @@ logical
 
 Callable subclass of tuple for representing logical operators/connectives based on their truth tables.
 
-|pypi|
+|pypi| |travis|
 
 .. |pypi| image:: https://badge.fury.io/py/logical.svg
    :target: https://badge.fury.io/py/logical
    :alt: PyPI version and link.
+
+.. |travis| image:: https://travis-ci.com/reity/logical.svg?branch=master
+    :target: https://travis-ci.com/reity/logical
 
 Package Installation and Usage
 ------------------------------
