@@ -4,7 +4,7 @@ logical
 
 Callable subclass of tuple for representing logical operators/connectives based on their truth tables.
 
-|pypi| |travis|
+|pypi| |travis| |coveralls|
 
 .. |pypi| image:: https://badge.fury.io/py/logical.svg
    :target: https://badge.fury.io/py/logical
@@ -12,6 +12,9 @@ Callable subclass of tuple for representing logical operators/connectives based 
 
 .. |travis| image:: https://travis-ci.com/reity/logical.svg?branch=master
     :target: https://travis-ci.com/reity/logical
+
+.. |coveralls| image:: https://coveralls.io/repos/github/reity/logical/badge.svg?branch=master
+   :target: https://coveralls.io/github/reity/logical?branch=master
 
 Package Installation and Usage
 ------------------------------
