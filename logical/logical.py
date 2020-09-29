@@ -49,7 +49,7 @@ class logical(tuple):
     names = {
         (0, 0): 'uf',
         (0, 1): 'id',
-        (1, 0): 'id',
+        (1, 0): 'not',
         (1, 1): 'ut',
         (0, 0, 0, 0): 'bf',
         (0, 0, 0, 1): 'and',
@@ -100,6 +100,10 @@ class logical(tuple):
 
         >>> logical((1, 0, 0, 1)).name()
         'xnor'
+        >>> len([o.name for o in logical.unary])
+        4
+        >>> len([o.name for o in logical.binary])
+        16
         """
         return dict(logical.names)[self]
 
