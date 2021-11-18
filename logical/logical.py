@@ -1,13 +1,11 @@
 """
-Callable subclass of tuple for representing logical
-operators/connectives based on their truth tables.
+Callable subclass of tuple for representing logical operators/connectives based
+on their truth tables.
 
-All four unary and all sixteen binary operators are
-available as attributes of the :obj:`logical` class,
-and also as constants. Likewise, the three sets of
-operators :obj:`logical.unary`, :obj:`logical.binary`,
-and :obj:`logical.every` are available both as
-attributes of :obj:`logical` and as constants.
+All four unary and all sixteen binary operators are available as attributes of
+the :obj:`logical` class, and also as constants. Likewise, the three sets of
+operators :obj:`logical.unary`, :obj:`logical.binary`, and :obj:`logical.every`
+are available both as attributes of :obj:`logical` and as constants.
 """
 from __future__ import annotations
 import doctest
@@ -16,32 +14,71 @@ import math
 
 class logical(tuple):
     """
-    The list of unary and binary logical operations
-    represented as the output columns of truth tables
-    where the input column pairs are sorted in
-    ascending dictionary order:
+    Each instance of this class represents a boolean function of ``n`` inputs
+    by specifying its output values across all possible inputs. In other words,
+    an instance represents the *output column* of a truth table for a function
+    (under the assumption that the input vectors to which each output value
+    corresponds are sorted in ascending order). Each instance representing a
+    function that accepts ``n`` inputs must have length ``2**n``.
 
-    * ``(0, 0)`` is **UNARY FALSE**
-    * ``(0, 1)`` is **IDENTITY**
-    * ``(1, 0)`` is **NOT**
-    * ``(1, 1)`` is **UNARY TRUE**
+    For example, consider the truth table below for a boolean function *f* that
+    accepts two inputs:
 
-    * ``(0, 0, 0, 0)`` is **BINARY FALSE**
-    * ``(0, 0, 0, 1)`` is **AND**
-    * ``(0, 0, 1, 0)`` is **NIMP** (*i.e.*, ``>``)
-    * ``(0, 0, 1, 1)`` is **FST** (*i.e.*, first/left-hand input)
-    * ``(0, 1, 0, 0)`` is **NIF** (*i.e.*, ``<``)
-    * ``(0, 1, 0, 1)`` is **SND** (*i.e.*, second/right-hand input)
-    * ``(0, 1, 1, 0)`` is **XOR** (*i.e.*, ``!=``)
-    * ``(0, 1, 1, 1)`` is **OR**
-    * ``(1, 0, 0, 0)`` is **NOR**
-    * ``(1, 0, 0, 1)`` is **XNOR** (*i.e.*, ``==``)
-    * ``(1, 0, 1, 0)`` is **NSND** (*i.e.*, negation of second input)
-    * ``(1, 0, 1, 1)`` is **IF** (*i.e.*, ``>=``)
-    * ``(1, 1, 0, 0)`` is **NFST** (*i.e.*, negation of first input)
-    * ``(1, 1, 0, 1)`` is **IMP** (*i.e.*, ``<=``)
-    * ``(1, 1, 1, 0)`` is **NAND**
-    * ``(1, 1, 1, 1)`` is **BINARY TRUE**
+    +-----+-----+----------------+
+    | *x* | *y* | *f* (*x*, *y*) |
+    +-----+-----+----------------+
+    |  0  |  0  | 1              |
+    +-----+-----+----------------+
+    |  0  |  1  | 0              |
+    +-----+-----+----------------+
+    |  1  |  0  | 1              |
+    +-----+-----+----------------+
+    |  1  |  1  | 0              |
+    +-----+-----+----------------+
+
+    The entire function *f* can be represented using the right-most column.
+    For the example function *f* defined by the table above, this can be done
+    in the manner illustrated below.
+
+    >>> f = logical((1, 0, 1, 0))
+    >>> f(0, 1)
+    0
+    >>> f(1, 0)
+    1
+
+    Pre-defined instances are defined for all unary and binary functions, and
+    are available as attributes of this class and as top-level constants:
+
+    * ``(0, 0)`` = :obj:`logical.uf_` represents **UNARY FALSE**
+    * ``(0, 1)`` = :obj:`logical.id_` represents **IDENTITY**
+    * ``(1, 0)`` = :obj:`logical.not_` represents **NOT**
+    * ``(1, 1)`` = :obj:`logical.ut_` represents **UNARY TRUE**
+
+    * ``(0, 0, 0, 0)`` = :obj:`logical.bf_` represents **BINARY FALSE**
+    * ``(0, 0, 0, 1)`` = :obj:`logical.and_` represents **AND**
+    * ``(0, 0, 1, 0)`` = :obj:`logical.nimp_` represents **NIMP** (*i.e.*, ``>``)
+    * ``(0, 0, 1, 1)`` = :obj:`logical.fst_` represents **FST** (*i.e.*, first/left-hand input)
+    * ``(0, 1, 0, 0)`` = :obj:`logical.nif_` represents **NIF** (*i.e.*, ``<``)
+    * ``(0, 1, 0, 1)`` = :obj:`logical.snd_` represents **SND** (*i.e.*, second/right-hand input)
+    * ``(0, 1, 1, 0)`` = :obj:`logical.xor_` represents **XOR** (*i.e.*, ``!=``)
+    * ``(0, 1, 1, 1)`` = :obj:`logical.or_` represents **OR**
+    * ``(1, 0, 0, 0)`` = :obj:`logical.nor_` represents **NOR**
+    * ``(1, 0, 0, 1)`` = :obj:`logical.xnor_` represents **XNOR** (*i.e.*, ``==``)
+    * ``(1, 0, 1, 0)`` = :obj:`logical.nsnd_` represents **NSND** (*i.e.*, negation of second input)
+    * ``(1, 0, 1, 1)`` = :obj:`logical.if_` represents **IF** (*i.e.*, ``>=``)
+    * ``(1, 1, 0, 0)`` = :obj:`logical.nfst_` represents **NFST** (*i.e.*, negation of first input)
+    * ``(1, 1, 0, 1)`` = :obj:`logical.imp_` represents **IMP** (*i.e.*, ``<=``)
+    * ``(1, 1, 1, 0)`` = :obj:`logical.nand_` represents **NAND**
+    * ``(1, 1, 1, 1)`` = :obj:`logical.bt_` represents **BINARY TRUE**
+
+    >>> logical.xor_(1, 0)
+    1
+    >>> and_(1, 0)
+    0
+
+    Because this class is derived from the ``tuple`` type, all methods
+    and functions that operate on tuples also work with instances of
+    this class.
 
     >>> logical((1, 0)) == logical((1, 0))
     True
