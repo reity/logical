@@ -11,14 +11,16 @@ Callable subclass of tuple for representing logical operators/connectives based 
    :alt: PyPI version and link.
 
 .. |travis| image:: https://travis-ci.com/reity/logical.svg?branch=master
-    :target: https://travis-ci.com/reity/logical
+   :target: https://travis-ci.com/reity/logical
+   :alt: Travis CI build status.
 
 .. |coveralls| image:: https://coveralls.io/repos/github/reity/logical/badge.svg?branch=master
    :target: https://coveralls.io/github/reity/logical?branch=master
+   :alt: Coveralls test coverage summary.
 
 Package Installation and Usage
 ------------------------------
-The package is available on PyPI::
+The package is available on `PyPI <https://pypi.org/project/logical/>`_::
 
     python -m pip install logical
 
@@ -91,7 +93,8 @@ Testing and Conventions
 -----------------------
 All unit tests are executed and their coverage is measured when using `nose <https://nose.readthedocs.io/>`_ (see ``setup.cfg`` for configution details)::
 
-    nosetests
+    python -m pip install nose coverage
+    nosetests --cover-erase
 
 Alternatively, all unit tests are included in the module itself and can be executed using `doctest <https://docs.python.org/3/library/doctest.html>`_::
 
@@ -99,11 +102,12 @@ Alternatively, all unit tests are included in the module itself and can be execu
 
 Style conventions are enforced using `Pylint <https://www.pylint.org/>`_::
 
+    python -m pip install pylint
     pylint logical
 
 Contributions
 -------------
-In order to contribute to the source code, open an issue or submit a pull request on the GitHub page for this library.
+In order to contribute to the source code, open an issue or submit a pull request on the `GitHub page <https://github.com/reity/logical>`_ for this library.
 
 Versioning
 ----------
