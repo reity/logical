@@ -1,4 +1,4 @@
-"""Allow users to use values directly."""
+"""Gives users direct access to class and functions."""
 from logical.logical import\
     logical,\
     unary, binary, every,\
