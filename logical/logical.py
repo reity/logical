@@ -1,9 +1,15 @@
-"""Logical operators as callable tuples.
-
+"""
 Callable subclass of tuple for representing logical
 operators/connectives based on their truth tables.
-"""
 
+All four unary and all sixteen binary operators are
+available as attributes of the :obj:`logical` class,
+and also as constants. Likewise, the three sets of
+operators :obj:`logical.unary`, :obj:`logical.binary`,
+and :obj:`logical.every` are available both as
+attributes of :obj:`logical` and as constants.
+
+"""
 from __future__ import annotations
 import doctest
 import itertools
@@ -16,27 +22,27 @@ class logical(tuple):
     where the input column pairs are sorted in
     ascending dictionary order:
 
-    * (0, 0) is UNARY FALSE
-    * (0, 1) is IDENTITY
-    * (1, 0) is NOT
-    * (1, 1) is UNARY TRUE
+    * ``(0, 0)`` is **UNARY FALSE**
+    * ``(0, 1)`` is **IDENTITY**
+    * ``(1, 0)`` is **NOT**
+    * ``(1, 1)`` is **UNARY TRUE**
 
-    * (0, 0, 0, 0) is BINARY FALSE
-    * (0, 0, 0, 1) is AND
-    * (0, 0, 1, 0) is NIMP (i.e., >)
-    * (0, 0, 1, 1) is FST (first/left-hand input)
-    * (0, 1, 0, 0) is NIF (i.e., <)
-    * (0, 1, 0, 1) is SND (second/right-hand input)
-    * (0, 1, 1, 0) is XOR (i.e., !=)
-    * (0, 1, 1, 1) is OR
-    * (1, 0, 0, 0) is NOR
-    * (1, 0, 0, 1) is XNOR (i.e., ==)
-    * (1, 0, 1, 0) is NSND (negation of second input)
-    * (1, 0, 1, 1) is IF (i.e., >=)
-    * (1, 1, 0, 0) is NFST (negation of first input)
-    * (1, 1, 0, 1) is IMP (i.e., <=)
-    * (1, 1, 1, 0) is NAND
-    * (1, 1, 1, 1) is BINARY TRUE
+    * ``(0, 0, 0, 0)`` is **BINARY FALSE**
+    * ``(0, 0, 0, 1)`` is **AND**
+    * ``(0, 0, 1, 0)`` is **NIMP** (*i.e.*, ``>``)
+    * ``(0, 0, 1, 1)`` is **FST** (first/left-hand input)
+    * ``(0, 1, 0, 0)`` is **NIF** (*i.e.*, ``<``)
+    * ``(0, 1, 0, 1)`` is **SND** (second/right-hand input)
+    * ``(0, 1, 1, 0)`` is **XOR** (*i.e.*, ``!=``)
+    * ``(0, 1, 1, 1)`` is **OR**
+    * ``(1, 0, 0, 0)`` is **NOR**
+    * ``(1, 0, 0, 1)`` is **XNOR** (*i.e.*, ``==``)
+    * ``(1, 0, 1, 0)`` is **NSND** (negation of second input)
+    * ``(1, 0, 1, 1)`` is **IF** (*i.e.*, ``>=``)
+    * ``(1, 1, 0, 0)`` is **NFST** (negation of first input)
+    * ``(1, 1, 0, 1)`` is **IMP** (*i.e.*, ``<=``)
+    * ``(1, 1, 1, 0)`` is **NAND**
+    * ``(1, 1, 1, 1)`` is **BINARY TRUE**
 
     >>> logical((1, 0)) == logical((1, 0))
     True
@@ -45,7 +51,6 @@ class logical(tuple):
     >>> logical((1, 0))[1]
     0
     """
-
     names = {
         (0, 0): 'uf',
         (0, 1): 'id',
@@ -68,10 +73,20 @@ class logical(tuple):
         (1, 1, 1, 0): 'nand',
         (1, 1, 1, 1): 'bt'
     }
+    """Typical concise names for all unary and binary operators."""
+
+    every = None
+    """Set of all unary and binary operators."""
+
+    unary = None
+    """Set of all unary operators."""
+
+    binary = None
+    """Set of all binary operators."""
 
     def __call__(self: logical, *arguments) -> int:
         """
-        Apply the operator to an input tuple.
+        Apply this operator to an input tuple.
 
         >>> logical((1, 0))(1)
         0
@@ -96,7 +111,7 @@ class logical(tuple):
 
     def name(self: logical) -> str:
         """
-        Typical name for the operator.
+        Return the typical concise name for this operator.
 
         >>> logical((1, 0, 0, 1)).name()
         'xnor'
@@ -109,7 +124,7 @@ class logical(tuple):
 
     def arity(self: logical) -> int:
         """
-        Arity of the operator.
+        Return the arity of this operator.
 
         >>> logical((1, 0)).arity()
         1
@@ -117,6 +132,27 @@ class logical(tuple):
         2
         """
         return int(math.log2(len(self)))
+
+    uf_ = None
+    id_ = None
+    not_ = None
+    ut_ = None
+    bf_ = None
+    and_ = None
+    nimp_ = None
+    fst_ = None
+    nif_ = None
+    snd_ = None
+    xor_ = None
+    or_ = None
+    nor_ = None
+    xnor_ = None
+    nsnd_ = None
+    if_ = None
+    nfst_ = None
+    imp_ = None
+    nand_ = None
+    bt_ = None
 
 # All unary and binary operators as named class constants.
 logical.uf_ = logical((0, 0))
