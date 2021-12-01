@@ -4,7 +4,7 @@ logical
 
 Callable subclass of tuple for representing logical operators/connectives based on their truth tables.
 
-|pypi| |readthedocs| |travis| |coveralls|
+|pypi| |readthedocs| |actions| |coveralls|
 
 .. |pypi| image:: https://badge.fury.io/py/logical.svg
    :target: https://badge.fury.io/py/logical
@@ -14,9 +14,9 @@ Callable subclass of tuple for representing logical operators/connectives based 
    :target: https://logical.readthedocs.io/en/latest/?badge=latest
    :alt: Read the Docs documentation status.
 
-.. |travis| image:: https://travis-ci.com/reity/logical.svg?branch=master
-   :target: https://travis-ci.com/reity/logical
-   :alt: Travis CI build status.
+.. |actions| image:: https://github.com/reity/logical/workflows/lint-test-cover/badge.svg
+   :target: https://github.com/reity/logical/actions/workflows/lint-test-cover.yml
+   :alt: GitHub Actions status.
 
 .. |coveralls| image:: https://coveralls.io/repos/github/reity/logical/badge.svg?branch=master
    :target: https://coveralls.io/github/reity/logical?branch=master
@@ -95,7 +95,7 @@ The documentation can be generated automatically from the source files using `Sp
 
 Testing and Conventions
 -----------------------
-All unit tests are executed and their coverage is measured when using `nose <https://nose.readthedocs.io/>`_ (see ``setup.cfg`` for configution details)::
+All unit tests are executed and their coverage is measured when using `nose <https://nose.readthedocs.io/>`_ (see ``setup.cfg`` for configuration details)::
 
     python -m pip install nose coverage
     nosetests --cover-erase
