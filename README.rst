@@ -14,8 +14,8 @@ Callable subclass of tuple for representing logical operators/connectives based 
    :target: https://logical.readthedocs.io/en/latest/?badge=latest
    :alt: Read the Docs documentation status.
 
-.. |actions| image:: https://github.com/reity/logical/workflows/lint-test-cover/badge.svg
-   :target: https://github.com/reity/logical/actions/workflows/lint-test-cover.yml
+.. |actions| image:: https://github.com/reity/logical/workflows/lint-test-cover-docs/badge.svg
+   :target: https://github.com/reity/logical/actions/workflows/lint-test-cover-docs.yml
    :alt: GitHub Actions status.
 
 .. |coveralls| image:: https://coveralls.io/repos/github/reity/logical/badge.svg?branch=master

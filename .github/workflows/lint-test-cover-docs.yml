@@ -1,4 +1,4 @@
-name: lint-test-cover
+name: lint-test-cover-docs
 on:
   push
 jobs:
@@ -23,3 +23,7 @@ jobs:
           python -m coveralls --service=github # Submit to coveralls.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test auto-generation of documentation.
+        run: |
+          pip install -U -r docs/requirements.txt
+          cd docs && sphinx-apidoc -f -E --templatedir=_templates -o _source .. ../setup.py && make html && cd ..
