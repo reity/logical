@@ -2,7 +2,7 @@
 logical
 =======
 
-Callable subclass of tuple for representing logical operators/connectives based on their truth tables.
+Callable subclass of the tuple type for representing logical operators/connectives based on their truth tables.
 
 |pypi| |readthedocs| |actions| |coveralls|
 

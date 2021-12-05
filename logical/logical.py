@@ -1,6 +1,6 @@
 """
-Callable subclass of tuple for representing logical operators/connectives based
-on their truth tables.
+Callable subclass of the tuple type for representing logical operators and
+connectives based on their truth tables.
 
 All four unary and all sixteen binary operators are available as attributes of
 the :obj:`logical` class, and also as constants. Likewise, the three sets of

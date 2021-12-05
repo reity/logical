@@ -16,8 +16,8 @@ setup(
     url="https://github.com/reity/logical",
     author="Andrei Lapets",
     author_email="a@lapets.io",
-    description="Callable subclass of tuple for representing logical "+\
-                "operators/connectives based on their truth tables.",
+    description="Callable subclass of the tuple type for representing "+\
+                "logical operators/connectives based on their truth tables.",
     long_description=long_description,
     long_description_content_type="text/x-rst",
     test_suite="nose.collector",
