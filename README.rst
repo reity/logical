@@ -76,7 +76,7 @@ Pre-defined instances are provided for all unary and binary boolean functions. T
     >>> and_(1, 0)
     0
 
-The constants ``unary`` and ``binary`` are also defined. Each is a set containing exactly those instances of ``logical`` that represent functions having that arity.
+The constants ``unary`` and ``binary`` are also defined. Each is a set containing exactly those instances of ``logical`` that represent functions having that arity::
 
     >>> unary
     {(0, 0), (1, 0), (1, 1), (0, 1)}
