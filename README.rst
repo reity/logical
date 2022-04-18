@@ -18,8 +18,8 @@ Callable subclass of the tuple type for representing logical operators/connectiv
    :target: https://github.com/reity/logical/actions/workflows/lint-test-cover-docs.yml
    :alt: GitHub Actions status.
 
-.. |coveralls| image:: https://coveralls.io/repos/github/reity/logical/badge.svg?branch=master
-   :target: https://coveralls.io/github/reity/logical?branch=master
+.. |coveralls| image:: https://coveralls.io/repos/github/reity/logical/badge.svg?branch=main
+   :target: https://coveralls.io/github/reity/logical?branch=main
    :alt: Coveralls test coverage summary.
 
 Package Installation and Usage
