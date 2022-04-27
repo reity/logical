@@ -2,10 +2,11 @@
 Callable subclass of the tuple type for representing logical operators and
 connectives based on their truth tables.
 
-All four unary and all sixteen binary operators are available as attributes of
-the :obj:`logical` class, and also as constants. Likewise, the three sets of
-operators :obj:`logical.unary`, :obj:`logical.binary`, and :obj:`logical.every`
-are available both as attributes of :obj:`logical` and as constants.
+The two nullary, four unary, and sixteen binary operators are available as
+attributes of the :obj:`logical` class, and also as constants. Likewise, the
+four sets of operators :obj:`logical.nullary`, :obj:`logical.unary`,
+:obj:`logical.binary`, and :obj:`logical.every` are available both as attributes
+of :obj:`logical` and as exported top-level constants.
 """
 from __future__ import annotations
 import doctest
@@ -46,8 +47,11 @@ class logical(tuple):
     >>> f(1, 0)
     1
 
-    Pre-defined instances are defined for all unary and binary functions, and
-    are available as attributes of this class and as top-level constants:
+    Pre-defined instances are defined for all nullary, unary and binary functions,
+    and are available as attributes of this class and as top-level constants:
+
+    * ``(0,)`` = :obj:`logical.nf_` represents **NULLARY FALSE**
+    * ``(1,)`` = :obj:`logical.nt_` represents **NULLARY TRUE**
 
     * ``(0, 0)`` = :obj:`logical.uf_` represents **UNARY FALSE**
     * ``(0, 1)`` = :obj:`logical.id_` represents **IDENTITY**
@@ -88,6 +92,8 @@ class logical(tuple):
     0
     """
     names = {
+        (0,): 'nf',
+        (1,): 'nt',
         (0, 0): 'uf',
         (0, 1): 'id',
         (1, 0): 'not',
@@ -109,10 +115,10 @@ class logical(tuple):
         (1, 1, 1, 0): 'nand',
         (1, 1, 1, 1): 'bt'
     }
-    """Typical concise names for all unary and binary operators."""
+    """Typical concise names for all nullary, unary, and binary operators."""
 
-    every = None
-    """Set of all unary and binary operators."""
+    nullary = None
+    """Set of all nullary operators."""
 
     unary = None
     """Set of all unary operators."""
@@ -120,10 +126,15 @@ class logical(tuple):
     binary = None
     """Set of all binary operators."""
 
+    every = None
+    """Set of all nullary, unary, and binary operators."""
+
     def __call__(self: logical, *arguments) -> int:
         """
         Apply this operator to an input tuple.
 
+        >>> logical((1,))()
+        1
         >>> logical((1, 0))(1)
         0
         >>> logical((1, 0, 0, 1))(0, 0)
@@ -137,20 +148,26 @@ class logical(tuple):
         >>> logical((1, 0, 0, 1, 0, 1, 0, 1))(1, 1, 0)
         0
         """
+        if len(arguments) == 0:
+            return self[0]
         if len(arguments) == 1: # pylint: disable=R1705
             return self[[0, 1].index(arguments[0])]
-        elif len(arguments) == 2:
+        if len(arguments) == 2:
             return self[[(0, 0), (0, 1), (1, 0), (1, 1)].index(tuple(arguments))]
-        else:
-            inputs = list(itertools.product(*[(0, 1)]*self.arity()))
-            return self[inputs.index(tuple(arguments))]
+
+        inputs = list(itertools.product(*[(0, 1)]*self.arity()))
+        return self[inputs.index(tuple(arguments))]
 
     def name(self: logical) -> str:
         """
         Return the typical concise name for this operator.
 
+        >>> logical((0,)).name()
+        'nf'
         >>> logical((1, 0, 0, 1)).name()
         'xnor'
+        >>> len([o.name for o in logical.nullary])
+        2
         >>> len([o.name for o in logical.unary])
         4
         >>> len([o.name for o in logical.binary])
@@ -162,12 +179,36 @@ class logical(tuple):
         """
         Return the arity of this operator.
 
+        >>> logical((1,)).arity()
+        0
         >>> logical((1, 0)).arity()
         1
         >>> logical((1, 0, 0, 1)).arity()
         2
         """
         return int(math.log2(len(self)))
+
+    nf_ = None
+    """
+    Nullary **FALSE** (constant) operation.
+
+    +-----------+
+    | ``nf_()`` |
+    +-----------+
+    | ``0``     |
+    +-----------+
+    """
+
+    nt_ = None
+    """
+    Nullary **TRUE** (constant) operation.
+
+    +-----------+
+    | ``nt_()`` |
+    +-----------+
+    | ``1``     |
+    +-----------+
+    """
 
     uf_ = None
     """
@@ -493,7 +534,9 @@ class logical(tuple):
     +------------+---------------+
     """
 
-# All unary and binary operators as named class constants.
+# All nullary, unary, and binary operators as named class constants.
+logical.nf_ = logical((0,))
+logical.nt_ = logical((1,))
 logical.uf_ = logical((0, 0))
 logical.id_ = logical((0, 1))
 logical.not_ = logical((1, 0))
@@ -515,7 +558,9 @@ logical.imp_ = logical((1, 1, 0, 1))
 logical.nand_ = logical((1, 1, 1, 0))
 logical.bt_ = logical((1, 1, 1, 1))
 
-# All unary and binary operators as top-level constants.
+# All nullary, unary, and binary operators as top-level constants.
+nf_ = logical.nf_
+nt_ = logical.nt_
 uf_ = logical.uf_
 id_ = logical.id_
 not_ = logical.not_
@@ -537,7 +582,8 @@ imp_ = logical.imp_
 nand_ = logical.nand_
 bt_ = logical.bt_
 
-# Useful containers.
+# Useful class constants: containers of all operators.
+logical.nullary = {nf_, nt_}
 logical.unary = {uf_, id_, not_, ut_}
 logical.binary = {
     bf_,
@@ -545,8 +591,10 @@ logical.binary = {
     nor_, xnor_, nsnd_, if_, nfst_, imp_, nand_,
     bt_
 }
-logical.every = logical.unary | logical.binary
+logical.every = logical.nullary | logical.unary | logical.binary
 
+# Top-level constants corresponding to class constants for containers.
+nullary = logical.nullary
 unary = logical.unary
 binary = logical.binary
 every = logical.every
