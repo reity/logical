@@ -91,7 +91,7 @@ class logical(tuple):
     >>> logical((1, 0))[1]
     0
     """
-    names = {
+    names: set = {
         (0,): 'nf',
         (1,): 'nt',
         (0, 0): 'uf',
@@ -117,16 +117,16 @@ class logical(tuple):
     }
     """Typical concise names for all nullary, unary, and binary operators."""
 
-    nullary = None
+    nullary: set = {} # Populated at top-level, after this class definition.
     """Set of all nullary operators."""
 
-    unary = None
+    unary: set = {} # Populated at top-level, after this class definition.
     """Set of all unary operators."""
 
-    binary = None
+    binary: set = {} # Populated at top-level, after this class definition.
     """Set of all binary operators."""
 
-    every = None
+    every: set = {} # Populated at top-level, after this class definition.
     """Set of all nullary, unary, and binary operators."""
 
     def __call__(self: logical, *arguments) -> int:
@@ -188,7 +188,7 @@ class logical(tuple):
         """
         return int(math.log2(len(self)))
 
-    nf_ = None
+    nf_: logical = None
     """
     Nullary **FALSE** (constant) operation.
 
@@ -199,7 +199,7 @@ class logical(tuple):
     +-----------+
     """
 
-    nt_ = None
+    nt_: logical = None
     """
     Nullary **TRUE** (constant) operation.
 
@@ -210,7 +210,7 @@ class logical(tuple):
     +-----------+
     """
 
-    uf_ = None
+    uf_: logical = None
     """
     Unary **FALSE** (constant) operation.
 
@@ -223,7 +223,7 @@ class logical(tuple):
     +-------+------------+
     """
 
-    id_ = None
+    id_: logical = None
     """
     Unary **IDENTITY** operation.
 
@@ -236,7 +236,7 @@ class logical(tuple):
     +-------+------------+
     """
 
-    not_ = None
+    not_: logical = None
     """
     Unary **NOT** operation (*i.e.*, negation).
 
@@ -249,7 +249,7 @@ class logical(tuple):
     +-------+-------------+
     """
 
-    ut_ = None
+    ut_: logical = None
     """
     Unary **TRUE** (constant) operation.
 
@@ -262,7 +262,7 @@ class logical(tuple):
     +-------+------------+
     """
 
-    bf_ = None
+    bf_: logical = None
     """
     Binary **FALSE** (constant) operation.
 
@@ -279,7 +279,7 @@ class logical(tuple):
     +------------+---------------+
     """
 
-    and_ = None
+    and_: logical = None
     """
     Binary **AND** operation (*i.e.*, conjunction).
 
@@ -296,7 +296,7 @@ class logical(tuple):
     +------------+----------------+
     """
 
-    nimp_ = None
+    nimp_: logical = None
     """
     Binary **NIMP** operation (*i.e.*, ``>``).
 
@@ -313,7 +313,7 @@ class logical(tuple):
     +------------+-----------------+
     """
 
-    fst_ = None
+    fst_: logical = None
     """
     Binary **FST** operation (*i.e.*, first/left-hand input).
 
@@ -330,7 +330,7 @@ class logical(tuple):
     +------------+----------------+
     """
 
-    nif_ = None
+    nif_: logical = None
     """
     Binary **NIF** operation (*i.e.*, ``<``).
 
@@ -347,7 +347,7 @@ class logical(tuple):
     +------------+----------------+
     """
 
-    snd_ = None
+    snd_: logical = None
     """
     Binary **SND** operation (*i.e.*, second/right-hand input).
 
@@ -364,7 +364,7 @@ class logical(tuple):
     +------------+----------------+
     """
 
-    xor_ = None
+    xor_: logical = None
     """
     Binary **XOR** operation (*i.e.*, ``!=``).
 
@@ -381,7 +381,7 @@ class logical(tuple):
     +------------+----------------+
     """
 
-    or_ = None
+    or_: logical = None
     """
     Binary **OR** operation (*i.e.*, disjunction).
 
@@ -398,7 +398,7 @@ class logical(tuple):
     +------------+---------------+
     """
 
-    nor_ = None
+    nor_: logical = None
     """
     Binary **NOR** operation.
 
@@ -415,7 +415,7 @@ class logical(tuple):
     +------------+----------------+
     """
 
-    xnor_ = None
+    xnor_: logical = None
     """
     Binary **XNOR** operation (*i.e.*, ``==``).
 
@@ -432,7 +432,7 @@ class logical(tuple):
     +------------+-----------------+
     """
 
-    nsnd_ = None
+    nsnd_: logical = None
     """
     Binary **NSND** operation (*i.e.*, negation of second/right-hand input).
 
@@ -449,7 +449,7 @@ class logical(tuple):
     +------------+-----------------+
     """
 
-    if_ = None
+    if_: logical = None
     """
     Binary **IF** operation.
 
@@ -466,7 +466,7 @@ class logical(tuple):
     +------------+---------------+
     """
 
-    nfst_ = None
+    nfst_: logical = None
     """
     Binary **NFST** operation (*i.e.*, negation of first/left-hand input).
 
@@ -483,7 +483,7 @@ class logical(tuple):
     +------------+-----------------+
     """
 
-    imp_ = None
+    imp_: logical = None
     """
     Binary **IMP** operation (*i.e.*, implication or ``<=``).
 
@@ -500,7 +500,7 @@ class logical(tuple):
     +------------+----------------+
     """
 
-    nand_ = None
+    nand_: logical = None
     """
     Binary **NAND** operation (*i.e.*, negation of conjunction).
 
@@ -517,7 +517,7 @@ class logical(tuple):
     +------------+-----------------+
     """
 
-    bt_ = None
+    bt_: logical = None
     """
     Binary **TRUE** (constant) operation.
 
@@ -559,28 +559,28 @@ logical.nand_ = logical((1, 1, 1, 0))
 logical.bt_ = logical((1, 1, 1, 1))
 
 # All nullary, unary, and binary operators as top-level constants.
-nf_ = logical.nf_
-nt_ = logical.nt_
-uf_ = logical.uf_
-id_ = logical.id_
-not_ = logical.not_
-ut_ = logical.ut_
-bf_ = logical.bf_
-and_ = logical.and_
-nimp_ = logical.nimp_
-fst_ = logical.fst_
-nif_ = logical.nif_
-snd_ = logical.snd_
-xor_ = logical.xor_
-or_ = logical.or_
-nor_ = logical.nor_
-xnor_ = logical.xnor_
-nsnd_ = logical.nsnd_
-if_ = logical.if_
-nfst_ = logical.nfst_
-imp_ = logical.imp_
-nand_ = logical.nand_
-bt_ = logical.bt_
+nf_: logical = logical.nf_
+nt_: logical = logical.nt_
+uf_: logical = logical.uf_
+id_: logical = logical.id_
+not_: logical = logical.not_
+ut_: logical = logical.ut_
+bf_: logical = logical.bf_
+and_: logical = logical.and_
+nimp_: logical = logical.nimp_
+fst_: logical = logical.fst_
+nif_: logical = logical.nif_
+snd_: logical = logical.snd_
+xor_: logical = logical.xor_
+or_: logical = logical.or_
+nor_: logical = logical.nor_
+xnor_: logical = logical.xnor_
+nsnd_: logical = logical.nsnd_
+if_: logical = logical.if_
+nfst_: logical = logical.nfst_
+imp_: logical = logical.imp_
+nand_: logical = logical.nand_
+bt_: logical = logical.bt_
 
 # Useful class constants: containers of all operators.
 logical.nullary = {nf_, nt_}
@@ -594,10 +594,10 @@ logical.binary = {
 logical.every = logical.nullary | logical.unary | logical.binary
 
 # Top-level constants corresponding to class constants for containers.
-nullary = logical.nullary
-unary = logical.unary
-binary = logical.binary
-every = logical.every
+nullary: set = logical.nullary
+unary: set = logical.unary
+binary: set = logical.binary
+every: set = logical.every
 
 if __name__ == "__main__":
     doctest.testmod() # pragma: no cover
