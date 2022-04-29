@@ -1,6 +1,6 @@
 """
-Callable subclass of the tuple type for representing logical operators and
-connectives based on their truth tables.
+Callable subclass of the built-in :obj:`tuple <tuple>` type for representing
+logical operators and connectives based on their truth tables.
 
 The two nullary, four unary, and sixteen binary operators are available as
 attributes of the :obj:`logical` class, and also as constants. Likewise, the
@@ -80,8 +80,8 @@ class logical(tuple):
     >>> and_(1, 0)
     0
 
-    Because this class is derived from the ``tuple`` type, all methods
-    and functions that operate on tuples also work with instances of
+    Because this class is derived from the :obj:`tuple <tuple>` type, all
+    methods and functions that operate on tuples also work with instances of
     this class.
 
     >>> logical((1, 0)) == logical((1, 0))
@@ -131,7 +131,8 @@ class logical(tuple):
 
     def __call__(self: logical, *arguments) -> int:
         """
-        Apply this operator to an input tuple.
+        Apply this operator to zero or more input values (where the values
+        collectively represent an individual input row within a truth table).
 
         >>> logical((1,))()
         1
