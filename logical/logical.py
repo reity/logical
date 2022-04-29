@@ -9,7 +9,9 @@ four sets of operators :obj:`logical.nullary`, :obj:`logical.unary`,
 of :obj:`logical` and as exported top-level constants.
 """
 from __future__ import annotations
+from typing import Sequence, Union
 import doctest
+from collections.abc import Iterable
 import itertools
 import math
 
@@ -129,10 +131,13 @@ class logical(tuple):
     every: set = {} # Populated at top-level, after this class definition.
     """Set of all nullary, unary, and binary operators."""
 
-    def __call__(self: logical, *arguments) -> int:
+    def __call__(self: logical, *arguments: Union[Sequence[int], Sequence[Sequence[int]]]) -> int:
         """
-        Apply this operator to zero or more input values (where the values
-        collectively represent an individual input row within a truth table).
+        Apply the function represented by this instance to zero or more integer
+        arguments (where the arguments collectively represent an individual input
+        row within a truth table) or to a single iterable of integers (where the
+        entries of the iterable represent an individual input row within a truth
+        table).
 
         >>> logical((1,))()
         1
@@ -148,7 +153,41 @@ class logical(tuple):
         0
         >>> logical((1, 0, 0, 1, 0, 1, 0, 1))(1, 1, 0)
         0
+        >>> logical((1, 0, 0, 1, 0, 1, 0, 1))([1, 1, 0])
+        0
+        >>> logical((1, 0, 0, 1, 0, 1, 0, 1))((1, 1, 0))
+        0
+        >>> logical((1, 0, 0, 1, 0, 1, 0, 1))((1, 1, 0))
+        0
+
+        Any attempt to apply an instance to an invalid input raises an exception.
+
+        >>> logical((1, 0))(2.3)
+        Traceback (most recent call last):
+          ...
+        TypeError: expecting zero or more integers or a single iterable of integers
+        >>> logical((1, 0))(['abc'])
+        Traceback (most recent call last):
+          ...
+        TypeError: expecting zero or more integers or a single iterable of integers
+        >>> logical((1, 0))(2)
+        Traceback (most recent call last):
+          ...
+        ValueError: expecting an integer that is 0 or 1
         """
+        if len(arguments) == 1 and isinstance(arguments[0], Iterable):
+            arguments = arguments[0]
+
+        if not all(isinstance(argument, int) for argument in arguments):
+            raise TypeError(
+                'expecting zero or more integers or a single iterable of integers'
+            )
+
+        if not all(argument in (0, 1) for argument in arguments):
+            raise ValueError(
+                'expecting an integer that is 0 or 1'
+            )
+
         if len(arguments) == 0:
             return self[0]
         if len(arguments) == 1: # pylint: disable=R1705
