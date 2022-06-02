@@ -101,7 +101,7 @@ class logical(tuple):
     >>> logical((1, 0))[1]
     0
     """
-    names: set = {
+    names: dict = {
         (): 'undef',
         (0,): 'nf',
         (1,): 'nt',
@@ -128,16 +128,16 @@ class logical(tuple):
     }
     """Typical concise names for all nullary, unary, and binary operators."""
 
-    nullary: set = {} # Populated at top-level, after this class definition.
+    nullary: frozenset = {} # Populated at top-level, after this class definition.
     """Set of all nullary operators."""
 
-    unary: set = {} # Populated at top-level, after this class definition.
+    unary: frozenset = {} # Populated at top-level, after this class definition.
     """Set of all unary operators."""
 
-    binary: set = {} # Populated at top-level, after this class definition.
+    binary: frozenset = {} # Populated at top-level, after this class definition.
     """Set of all binary operators."""
 
-    every: set = {} # Populated at top-level, after this class definition.
+    every: frozenset = {} # Populated at top-level, after this class definition.
     """Set of all nullary, unary, and binary operators."""
 
     def __call__(self: logical, *arguments: Union[Sequence[int], Sequence[Sequence[int]]]) -> int:
@@ -650,21 +650,21 @@ nand_: logical = logical.nand_
 bt_: logical = logical.bt_
 
 # Useful class constants: containers of all operators.
-logical.nullary = {nf_, nt_}
-logical.unary = {uf_, id_, not_, ut_}
-logical.binary = {
+logical.nullary = frozenset({nf_, nt_})
+logical.unary = frozenset({uf_, id_, not_, ut_})
+logical.binary = frozenset({
     bf_,
     and_, nimp_, fst_, nif_, snd_, xor_, or_,
     nor_, xnor_, nsnd_, if_, nfst_, imp_, nand_,
     bt_
-}
-logical.every = logical.nullary | logical.unary | logical.binary
+})
+logical.every = frozenset(logical.nullary | logical.unary | logical.binary)
 
 # Top-level constants corresponding to class constants for containers.
-nullary: set = logical.nullary
-unary: set = logical.unary
-binary: set = logical.binary
-every: set = logical.every
+nullary: frozenset = logical.nullary
+unary: frozenset = logical.unary
+binary: frozenset = logical.binary
+every: frozenset = logical.every
 
 if __name__ == "__main__":
     doctest.testmod() # pragma: no cover
