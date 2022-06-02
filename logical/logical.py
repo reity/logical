@@ -52,13 +52,20 @@ class logical(tuple):
     Pre-defined instances are defined for all nullary, unary and binary functions,
     and are available as attributes of this class and as top-level constants:
 
+    * ``()`` = :obj:`logical.undef_` represents **UNDEFINED**
+      (*i.e.*, no inputs and no defined output)
+
     * ``(0,)`` = :obj:`logical.nf_` represents **NULLARY FALSE**
+      (*i.e.*, no inputs and a constant output)
     * ``(1,)`` = :obj:`logical.nt_` represents **NULLARY TRUE**
+      (*i.e.*, no inputs and a constant output)
 
     * ``(0, 0)`` = :obj:`logical.uf_` represents **UNARY FALSE**
+      (*i.e.*, a constant output for any one input)
     * ``(0, 1)`` = :obj:`logical.id_` represents **IDENTITY**
     * ``(1, 0)`` = :obj:`logical.not_` represents **NOT**
     * ``(1, 1)`` = :obj:`logical.ut_` represents **UNARY TRUE**
+      (*i.e.*, a constant output for any one input)
 
     * ``(0, 0, 0, 0)`` = :obj:`logical.bf_` represents **BINARY FALSE**
     * ``(0, 0, 0, 1)`` = :obj:`logical.and_` represents **AND**
@@ -70,7 +77,8 @@ class logical(tuple):
     * ``(0, 1, 1, 1)`` = :obj:`logical.or_` represents **OR**
     * ``(1, 0, 0, 0)`` = :obj:`logical.nor_` represents **NOR**
     * ``(1, 0, 0, 1)`` = :obj:`logical.xnor_` represents **XNOR** (*i.e.*, ``==``)
-    * ``(1, 0, 1, 0)`` = :obj:`logical.nsnd_` represents **NSND** (*i.e.*, negation of second input)
+    * ``(1, 0, 1, 0)`` = :obj:`logical.nsnd_` represents **NSND**
+      (*i.e.*, negation of second input)
     * ``(1, 0, 1, 1)`` = :obj:`logical.if_` represents **IF** (*i.e.*, ``>=``)
     * ``(1, 1, 0, 0)`` = :obj:`logical.nfst_` represents **NFST** (*i.e.*, negation of first input)
     * ``(1, 1, 0, 1)`` = :obj:`logical.imp_` represents **IMP** (*i.e.*, ``<=``)
@@ -94,6 +102,7 @@ class logical(tuple):
     0
     """
     names: set = {
+        (): 'undef',
         (0,): 'nf',
         (1,): 'nt',
         (0, 0): 'uf',
@@ -160,6 +169,14 @@ class logical(tuple):
         >>> logical((1, 0, 0, 1, 0, 1, 0, 1))((1, 1, 0))
         0
 
+        The instance corresponding to the nullary function with no defined output
+        raises an exception when applied to an input.
+
+        >>> logical(())()
+        Traceback (most recent call last):
+          ...
+        ValueError: no defined output
+
         Any attempt to apply an instance to an invalid input raises an exception.
 
         >>> logical((1, 0))(2.3)
@@ -179,19 +196,20 @@ class logical(tuple):
             arguments = arguments[0]
 
         if not all(isinstance(argument, int) for argument in arguments):
-            raise TypeError(
-                'expecting zero or more integers or a single iterable of integers'
-            )
+            raise TypeError('expecting zero or more integers or a single iterable of integers')
 
         if not all(argument in (0, 1) for argument in arguments):
-            raise ValueError(
-                'expecting an integer that is 0 or 1'
-            )
+            raise ValueError('expecting an integer that is 0 or 1')
+
+        if len(self) == 0:
+            raise ValueError('no defined output')
 
         if len(arguments) == 0:
             return self[0]
+
         if len(arguments) == 1: # pylint: disable=R1705
             return self[[0, 1].index(arguments[0])]
+
         if len(arguments) == 2:
             return self[[(0, 0), (0, 1), (1, 0), (1, 1)].index(tuple(arguments))]
 
@@ -219,6 +237,8 @@ class logical(tuple):
         """
         Return the arity of this operator.
 
+        >>> logical(()).arity()
+        0
         >>> logical((1,)).arity()
         0
         >>> logical((1, 0)).arity()
@@ -226,7 +246,12 @@ class logical(tuple):
         >>> logical((1, 0, 0, 1)).arity()
         2
         """
-        return int(math.log2(len(self)))
+        return 0 if len(self) == 0 else int(math.log2(len(self)))
+
+    undef_: logical = None
+    """
+    Nullary operation with no defined output.
+    """
 
     nf_: logical = None
     """
@@ -574,7 +599,8 @@ class logical(tuple):
     +------------+---------------+
     """
 
-# All nullary, unary, and binary operators as named class constants.
+# All operators as named class constants.
+logical.undef_ = logical(())
 logical.nf_ = logical((0,))
 logical.nt_ = logical((1,))
 logical.uf_ = logical((0, 0))
@@ -598,7 +624,8 @@ logical.imp_ = logical((1, 1, 0, 1))
 logical.nand_ = logical((1, 1, 1, 0))
 logical.bt_ = logical((1, 1, 1, 1))
 
-# All nullary, unary, and binary operators as top-level constants.
+# All operators as top-level constants.
+undef_: logical = logical.undef_
 nf_: logical = logical.nf_
 nt_: logical = logical.nt_
 uf_: logical = logical.uf_
