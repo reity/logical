@@ -100,6 +100,22 @@ class logical(tuple):
     False
     >>> logical((1, 0))[1]
     0
+
+    If an attempt is made to create an instance using an iterable that cannot
+    be interpreted as a truth table, an exception is raised.
+
+    >>> logical(('a', 'b'))
+    Traceback (most recent call last):
+      ...
+    TypeError: all entries in supplied truth table must be integers
+    >>> logical((-1, 2))
+    Traceback (most recent call last):
+      ...
+    ValueError: all integers in supplied truth table must be 0 or 1
+    >>> logical((1, 0, 1))
+    Traceback (most recent call last):
+      ...
+    ValueError: number of elements in supplied truth table must be zero or a power of 2
     """
     names: dict = {
         (): 'undef',
@@ -139,6 +155,20 @@ class logical(tuple):
 
     every: frozenset = {} # Populated at top-level, after this class definition.
     """Set of all nullary, unary, and binary operators."""
+
+    def __init__(self: logical, iterable: Sequence): # pylint: disable=W0613
+        super().__init__()
+
+        if not all(isinstance(b, int) for b in self):
+            raise TypeError('all entries in supplied truth table must be integers')
+
+        if not all(b in (0, 1) for b in self):
+            raise ValueError('all integers in supplied truth table must be 0 or 1')
+
+        if len(self) != 0 and not len(self) == (2 ** (len(self).bit_length() - 1)):
+            raise ValueError(
+                'number of elements in supplied truth table must be zero or a power of 2'
+            )
 
     def __call__(self: logical, *arguments: Union[Sequence[int], Sequence[Sequence[int]]]) -> int:
         """

@@ -5,7 +5,7 @@ with open("README.rst", "r") as fh:
 
 # The lines below can be parsed by `docs/conf.py`.
 name = "logical"
-version = "1.0.0"
+version = "2.0.0"
 
 setup(
     name=name,
