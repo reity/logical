@@ -33,7 +33,13 @@ The library can be imported in the usual ways::
     import logical
     from logical import *
 
-Each instance of the ``logical`` class (derived from the built-in `tuple <https://docs.python.org/3/library/stdtypes.html#tuple>`__ class) represents a boolean function that accepts ``n`` inputs by specifying its output values across all possible inputs. In other words, an instance represents the *output column* of a truth table for a function (under the assumption that the input vectors to which each output value corresponds are sorted in ascending order). Thus, each instance representing a function that accepts ``n`` inputs must have length ``2**n``.
+.. |logical| replace:: ``logical``
+.. _logical: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical
+
+.. |tuple| replace:: ``tuple``
+.. _tuple: https://docs.python.org/3/library/functions.html#func-tuple
+
+Each instance of the |logical|_ class (derived from the built-in |tuple|_ class) represents a boolean function that accepts ``n`` inputs by specifying its output values across all possible inputs. In other words, an instance represents the *output column* of a `truth table <https://en.wikipedia.org/wiki/Truth_table>`__ for a function (under the assumption that the input vectors to which each output value corresponds are sorted in ascending order). Thus, each instance representing a function that accepts ``n`` inputs must have length ``2**n``.
 
 For example, consider the truth table below for a boolean function *f* that accepts three inputs:
 
@@ -62,28 +68,40 @@ Notice that the input vectors (*i.e.*, the left-most three column values in each
     >>> from logical import *
     >>> f = logical((1, 0, 1, 0, 0, 1, 1, 0)) 
 
-It is then possible to apply the instance ``f`` defined above to any three-component input vector::
+It is then possible to `apply <https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.__call__>`__ the instance ``f`` defined above to any three-component input vector::
 
     >>> f(0, 1, 1)
     0
     >>> f(1, 1, 0)
     1
 
-Pre-defined instances are provided for all nullary, unary, and binary boolean functions. These are available both as constants and as attributes of the ``logical`` class::
+Pre-defined instances are provided for all nullary, unary, and binary boolean functions. These are available both as constants and as attributes of the |logical|_ class::
 
     >>> logical.xor_(1, 0)
     1
     >>> and_(1, 0)
     0
 
-The constants ``nullary``, ``unary``, and ``binary`` are also defined. Each is a set containing exactly those instances of ``logical`` that represent functions having that arity::
+.. |nullary| replace:: ``nullary``
+.. _nullary: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.nullary
+
+.. |unary| replace:: ``unary``
+.. _unary: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.unary
+
+.. |binary| replace:: ``binary``
+.. _binary: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.binary
+
+The constants |nullary|_, |unary|_, and |binary|_ are also defined. Each is a set containing exactly those instances of |logical|_ that represent functions having that arity::
 
     >>> unary
     {(0, 0), (1, 0), (1, 1), (0, 1)}
     >>> len(binary)
     16
 
-For convenience, the constant ``every`` is defined as the union of ``nullary``, ``unary``, and ``binary``.
+.. |every| replace:: ``every``
+.. _every: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.every
+
+For convenience, the constant |every|_ is defined as the union of |nullary|_, |unary|_, and |binary|_.
 
 Development
 -----------
