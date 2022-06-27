@@ -126,12 +126,12 @@ All unit tests are executed and their coverage is measured when using `pytest <h
 
 Alternatively, all unit tests are included in the module itself and can be executed using `doctest <https://docs.python.org/3/library/doctest.html>`__::
 
-    python logical/logical.py -v
+    python src/logical/logical.py -v
 
 Style conventions are enforced using `Pylint <https://www.pylint.org>`__::
 
     python -m pip install .[lint]
-    python -m pylint logical
+    python -m pylint src/logical
 
 Contributions
 ^^^^^^^^^^^^^
@@ -149,7 +149,7 @@ This library can be published as a `package on PyPI <https://pypi.org/project/lo
 
 Remove any old build/distribution files and package the source into a distribution archive::
 
-    rm -rf build dist *.egg-info
+    rm -rf build dist src/*.egg-info
     python -m build --sdist --wheel .
 
 Finally, upload the package distribution archive to `PyPI <https://pypi.org>`__ using the `twine <https://pypi.org/project/twine>`__ package::
