@@ -33,8 +33,11 @@ The library can be imported in the usual ways::
     import logical
     from logical import *
 
+Examples
+^^^^^^^^
+
 .. |logical| replace:: ``logical``
-.. _logical: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical
+.. _logical: https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical
 
 .. |tuple| replace:: ``tuple``
 .. _tuple: https://docs.python.org/3/library/functions.html#func-tuple
@@ -68,7 +71,7 @@ Notice that the input vectors (*i.e.*, the left-most three column values in each
     >>> from logical import *
     >>> f = logical((1, 0, 1, 0, 0, 1, 1, 0)) 
 
-It is then possible to `apply <https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.__call__>`__ the instance ``f`` defined above to any three-component input vector::
+It is then possible to `apply <https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.__call__>`__ the instance ``f`` defined above to any three-component input vector::
 
     >>> f(0, 1, 1)
     0
@@ -76,9 +79,9 @@ It is then possible to `apply <https://logical.readthedocs.io/en/latest/_source/
     1
 
 .. |call| replace:: ``__call__``
-.. _call: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.__call__
+.. _call: https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.__call__
 
-It is also possible to create a new |logical|_ instance that has a ``function`` attribute corresponding to a `compiled Python function <https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.compiled>`__ that has the same behavior as the |call|_ method (at least, on valid inputs). This Python function does not check that inputs are of the correct type and format, but has an execution time that is usually at most half of the execution time of the |call|_ method.
+It is also possible to create a new |logical|_ instance that has a ``function`` attribute corresponding to a `compiled Python function <https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.compiled>`__ that has the same behavior as the |call|_ method (at least, on valid inputs). This Python function does not check that inputs are of the correct type and format, but has an execution time that is usually at most half of the execution time of the |call|_ method.
 
     >>> f = logical((1, 0, 0, 1, 0, 1, 0, 1))
     >>> g = f.compiled()
@@ -95,13 +98,13 @@ Pre-defined instances are provided for all nullary, unary, and binary boolean fu
     0
 
 .. |nullary| replace:: ``nullary``
-.. _nullary: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.nullary
+.. _nullary: https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.nullary
 
 .. |unary| replace:: ``unary``
-.. _unary: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.unary
+.. _unary: https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.unary
 
 .. |binary| replace:: ``binary``
-.. _binary: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.binary
+.. _binary: https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.binary
 
 The constants |nullary|_, |unary|_, and |binary|_ are also defined. Each is a set containing exactly those instances of |logical|_ that represent functions having that arity::
 
@@ -111,7 +114,7 @@ The constants |nullary|_, |unary|_, and |binary|_ are also defined. Each is a se
     16
 
 .. |every| replace:: ``every``
-.. _every: https://logical.readthedocs.io/en/latest/_source/logical.html#logical.logical.logical.every
+.. _every: https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.every
 
 For convenience, the constant |every|_ is defined as the union of |nullary|_, |unary|_, and |binary|_.
 
@@ -140,7 +143,7 @@ Alternatively, all unit tests are included in the module itself and can be execu
 
     python src/logical/logical.py -v
 
-Style conventions are enforced using `Pylint <https://www.pylint.org>`__::
+Style conventions are enforced using `Pylint <https://pylint.pycqa.org>`__::
 
     python -m pip install .[lint]
     python -m pylint src/logical
@@ -159,11 +162,16 @@ This library can be published as a `package on PyPI <https://pypi.org/project/lo
 
     python -m pip install .[publish]
 
-Remove any old build/distribution files and package the source into a distribution archive::
+Ensure that the correct version number appears in ``pyproject.toml``, and that any links in this README document to the Read the Docs documentation of this package (or its dependencies) have appropriate version numbers. Also ensure that the Read the Docs project for this library has an `automation rule <https://docs.readthedocs.io/en/stable/automation-rules.html>`__ that activates and sets as the default all tagged versions. Create and push a tag for this version (replacing ``?.?.?`` with the version number)::
+
+    git tag ?.?.?
+    git push origin ?.?.?
+
+Remove any old build/distribution files. Then, package the source into a distribution archive::
 
     rm -rf build dist src/*.egg-info
     python -m build --sdist --wheel .
 
-Finally, upload the package distribution archive to `PyPI <https://pypi.org>`__ using the `twine <https://pypi.org/project/twine>`__ package::
+Finally, upload the package distribution archive to `PyPI <https://pypi.org>`__::
 
     python -m twine upload dist/*
