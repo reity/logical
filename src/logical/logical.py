@@ -9,9 +9,10 @@ four sets of operators :obj:`logical.nullary`, :obj:`logical.unary`,
 of :obj:`logical` and as exported top-level constants.
 """
 from __future__ import annotations
-from typing import Sequence, Union
+from typing import Sequence, Union, Optional
 import doctest
 from collections.abc import Iterable
+import ast
 import itertools
 import math
 
@@ -156,6 +157,30 @@ class logical(tuple):
     every: frozenset = {} # Populated at top-level, after this class definition.
     """Set of all nullary, unary, and binary operators."""
 
+    def _to_ast(
+            self: logical, index: int = 0, lower: int = 0, upper: Optional[int] = None
+        ) -> Union[ast.Constant, ast.IfExp]:
+        """
+        Construct an abstract syntax tree for a Python expression that computes the
+        function corresponding to the supplied truth table.
+        """
+        upper = len(self) if upper is None else upper
+
+        # Base cases include those where the range is only one output value
+        # and those where all output values in the supplied range are the same.
+        if lower == upper - 1 or len(set(self[lower: upper])) == 1:
+            return ast.Constant(value=self[lower: upper][0])
+
+        return ast.IfExp(
+            test=ast.Compare(
+                left=ast.Name(id='x' + str(index), ctx=ast.Load()),
+                ops=[ast.Eq()],
+                comparators=[ast.Constant(value=0)]
+            ),
+            body=self._to_ast(index + 1, lower, upper - ((upper - lower) // 2)),
+            orelse=self._to_ast(index + 1, lower + ((upper - lower) // 2), upper)
+        )
+
     def __init__(self: logical, iterable: Sequence): # pylint: disable=W0613
         super().__init__()
 
@@ -277,6 +302,63 @@ class logical(tuple):
         2
         """
         return 0 if len(self) == 0 else int(math.log2(len(self)))
+
+    def compiled(self:  logical) -> logical:
+        """
+        Return a new instance (representing the same logical function) that
+        has a new ``function`` attribute corresponding to a compiled version
+        of the logical function it represents.
+
+        >>> (logical((1,)).compiled()).function()
+        1
+        >>> (logical((1, 0)).compiled()).function(1)
+        0
+        >>> f = logical((1, 0, 0, 1))
+        >>> g = f.compiled()
+        >>> g.function(1, 1)
+        1
+        >>> f = logical((1, 0, 0, 1, 0, 1, 0, 1))
+        >>> g = f.compiled()
+        >>> g.function(0, 0, 0)
+        1
+        >>> g.function(1, 1, 0)
+        0
+
+        The function is constructed by translating the truth table into an
+        abstract syntax tree of a corresponding Python function definition
+        (using the :obj:`ast` module), compiling that function definition (using
+        the built-in :obj:`compile` function), executing that function definition
+        (using :obj:`exec`), and then assigning that function to the ``function``
+        attribute.
+
+        While the compiled function increases the amount of memory consumed by
+        an instance, the execution time of the compiled function on an input is
+        usually at most half of the execution time of the :obj:`~logical.__call__`
+        method.
+        """
+        # Compile the function corresponding to the truth table (enabling faster
+        # evaluation of the returned instance on inputs).
+        instance = logical(self)
+        function_ast = ast.fix_missing_locations(ast.Module(
+            body=[
+                ast.FunctionDef(
+                    name='function',
+                    args=ast.arguments(
+                        args=[ast.arg(arg='x' + str(i)) for i in range(self.arity())],
+                        posonlyargs=[], kwonlyargs=[], kw_defaults=[], defaults=[]
+                    ),
+                    body=[ast.Return(value=self._to_ast())],
+                    decorator_list=[]
+                )
+            ],
+            type_ignores=[]
+        ))
+
+        # Compile and execute the function definition using the object itself as the
+        # scope (thus assigning the function to an attribute of the new instance)
+        exec(compile(function_ast, '<string>', 'exec'), instance.__dict__) # pylint: disable=W0122
+
+        return instance
 
     undef_: logical = None
     """
