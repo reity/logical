@@ -81,7 +81,7 @@ It is then possible to `apply <https://logical.readthedocs.io/en/2.0.0/_source/l
 .. |call| replace:: ``__call__``
 .. _call: https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.__call__
 
-It is also possible to create a new |logical|_ instance that has a ``function`` attribute corresponding to a `compiled Python function <https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.compiled>`__ that has the same behavior as the |call|_ method (at least, on valid inputs). This Python function does not check that inputs are of the correct type and format, but has an execution time that is usually at most half of the execution time of the |call|_ method.
+It is also possible to create a new |logical|_ instance that has a ``function`` attribute corresponding to a `compiled Python function <https://logical.readthedocs.io/en/2.0.0/_source/logical.html#logical.logical.logical.compiled>`__ that has the same behavior as the |call|_ method (at least, on valid inputs). This Python function does not check that inputs are of the correct type and format, but has an execution time that is usually at most half of the execution time of the |call|_ method::
 
     >>> f = logical((1, 0, 0, 1, 0, 1, 0, 1))
     >>> g = f.compiled()

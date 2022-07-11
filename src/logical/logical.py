@@ -9,9 +9,9 @@ four sets of operators :obj:`logical.nullary`, :obj:`logical.unary`,
 of :obj:`logical` and as exported top-level constants.
 """
 from __future__ import annotations
-from typing import Sequence, Union, Optional
+from typing import Tuple, Union, Optional, Iterable
 import doctest
-from collections.abc import Iterable
+import collections.abc
 import ast
 import itertools
 import math
@@ -181,7 +181,7 @@ class logical(tuple):
             orelse=self._to_ast(index + 1, lower + ((upper - lower) // 2), upper)
         )
 
-    def __init__(self: logical, iterable: Sequence): # pylint: disable=unused-argument
+    def __init__(self: logical, iterable): # pylint: disable=unused-argument
         super().__init__()
 
         if not all(isinstance(b, int) for b in self):
@@ -195,7 +195,10 @@ class logical(tuple):
                 'number of elements in supplied truth table must be zero or a power of 2'
             )
 
-    def __call__(self: logical, *arguments: Union[Sequence[int], Sequence[Sequence[int]]]) -> int:
+    def __call__(
+            self: logical,
+            *arguments: Union[Tuple[int, ...], Tuple[Iterable[int]]]
+        ) -> int:
         """
         Apply the function represented by this instance to zero or more integer
         arguments (where the arguments collectively represent an individual input
@@ -224,6 +227,14 @@ class logical(tuple):
         >>> logical((1, 0, 0, 1, 0, 1, 0, 1))((1, 1, 0))
         0
 
+        The supplied iterable of integers can be an
+        `iterator <https://docs.python.org/3/glossary.html#term-iterator>`__,
+        as well.
+
+        >>> t = iter([1, 1, 0])
+        >>> logical((1, 0, 0, 1, 0, 1, 0, 1))(t)
+        0
+
         The instance corresponding to the nullary function with no defined output
         raises an exception when applied to an input.
 
@@ -247,8 +258,8 @@ class logical(tuple):
           ...
         ValueError: expecting an integer that is 0 or 1
         """
-        if len(arguments) == 1 and isinstance(arguments[0], Iterable):
-            arguments = arguments[0]
+        if len(arguments) == 1 and isinstance(arguments[0], collections.abc.Iterable):
+            arguments = tuple(arguments[0]) # Preserve items in case this is an iterator.
 
         if not all(isinstance(argument, int) for argument in arguments):
             raise TypeError('expecting zero or more integers or a single iterable of integers')
