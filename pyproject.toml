@@ -1,8 +1,11 @@
 [project]
 name = "logical"
 version = "2.0.0"
-description = "Callable class derived from the tuple type for representing logical operators/connectives based on their truth tables."
-license = {file = "LICENSE"}
+description = """\
+    Callable class derived from the tuple type for representing logical \
+    operators/connectives based on their truth tables.\
+    """
+license = {text = "MIT"}
 authors = [
     {name = "Andrei Lapets"},
     {email = "a@lapets.io"}
@@ -11,9 +14,8 @@ readme = "README.rst"
 requires-python = ">=3.7"
 
 [project.urls]
-homepage = "https://github.com/reity/logical"
-repository = "https://github.com/reity/logical"
-documentation = "https://logical.readthedocs.org"
+Repository = "https://github.com/reity/logical"
+Documentation = "https://logical.readthedocs.io"
 
 [project.optional-dependencies]
 docs = [
@@ -32,14 +34,13 @@ coveralls = [
     "coveralls~=3.3.1"
 ]
 publish = [
+    "build~=0.8",
     "twine~=4.0"
 ]
 
 [build-system]
 requires = [
-    "build~=0.8",
-    "setuptools~=62.0",
-    "wheel~=0.37"
+    "setuptools~=62.0"
 ]
 build-backend = "setuptools.build_meta"
 

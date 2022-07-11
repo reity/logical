@@ -23,7 +23,7 @@ class logical(tuple):
     an instance represents the *output column* of a truth table for a function
     (under the assumption that the input vectors to which each output value
     corresponds are sorted in ascending order). Each instance representing a
-    function that accepts ``n`` inputs must have length ``2**n``.
+    function that accepts ``n`` inputs must have length ``2 ** n``.
 
     For example, consider the truth table below for a boolean function *f* that
     accepts two inputs:
@@ -181,7 +181,7 @@ class logical(tuple):
             orelse=self._to_ast(index + 1, lower + ((upper - lower) // 2), upper)
         )
 
-    def __init__(self: logical, iterable: Sequence): # pylint: disable=W0613
+    def __init__(self: logical, iterable: Sequence): # pylint: disable=unused-argument
         super().__init__()
 
         if not all(isinstance(b, int) for b in self):
@@ -262,7 +262,7 @@ class logical(tuple):
         if len(arguments) == 0:
             return self[0]
 
-        if len(arguments) == 1: # pylint: disable=R1705
+        if len(arguments) == 1:
             return self[[0, 1].index(arguments[0])]
 
         if len(arguments) == 2:
@@ -303,7 +303,7 @@ class logical(tuple):
         """
         return 0 if len(self) == 0 else int(math.log2(len(self)))
 
-    def compiled(self:  logical) -> logical:
+    def compiled(self: logical) -> logical:
         """
         Return a new instance (representing the same logical function) that
         has a new ``function`` attribute corresponding to a compiled version
@@ -356,7 +356,10 @@ class logical(tuple):
 
         # Compile and execute the function definition using the object itself as the
         # scope (thus assigning the function to an attribute of the new instance)
-        exec(compile(function_ast, '<string>', 'exec'), instance.__dict__) # pylint: disable=W0122
+        exec( # pylint: disable=exec-used
+            compile(function_ast, '<string>', 'exec'),
+            instance.__dict__
+        )
 
         return instance
 
@@ -778,5 +781,5 @@ unary: frozenset = logical.unary
 binary: frozenset = logical.binary
 every: frozenset = logical.every
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     doctest.testmod() # pragma: no cover
